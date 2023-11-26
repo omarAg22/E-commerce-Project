@@ -1,64 +1,6 @@
 const Product = require('../models/productsModel');
 const Subcategory = require('../models/subcategoriesModel');
 
-// const createProduct = async (req, res) => {
-//   try {
-//     const {
-//       sku,
-//       product_image,
-//       product_name,
-//       subcategory_id,
-//       short_description,
-//       long_description,
-//       price,
-//       discount_price,
-//       options,
-//     } = req.body;
-//     // Vérifier si la sous-catégorie avec l'ID spécifié existe
-//     const subcategory = await Subcategory.findById(subcategory_id);
-
-//     if (!subcategory) {
-//       return res
-//         .status(404)
-//         .json({ message: "La sous-catégorie spécifiée n'existe pas." });
-//     }
-
-//     // Check if the product name is unique
-//     const existingProductByName = await Product.findOne({ product_name });
-//     if (existingProductByName) {
-//       return res.status(400).json({ message: 'Product name already in use.' });
-//     }
-
-//     // Check if the product SKU is unique
-//     const existingProductBySku = await Product.findOne({ sku });
-//     if (existingProductBySku) {
-//       return res.status(400).json({ message: 'Product SKU already in use.' });
-//     }
-
-//     const newProduct = new Product({
-//       sku,
-//       product_image,
-//       product_name,
-//       subcategory_id,
-//       short_description,
-//       long_description,
-//       price,
-//       discount_price,
-//       options,
-//       active: false, // Set active to false by default
-//     });
-
-//     const savedProduct = await newProduct.save();
-
-//     res.json({
-//       message: 'Product created successfully.',
-//       product: savedProduct,
-//     });
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
-
 const cloudinary = require('../config/cloudinaryConfig');
 const handleProductImageUpload = require('../middleware/uploadMiddleware');
 
@@ -71,6 +13,7 @@ const createProduct = async (req, res) => {
       short_description,
       long_description,
       price,
+      stock,
       discount_price,
       options,
     } = req.body;
@@ -97,6 +40,7 @@ const createProduct = async (req, res) => {
       short_description,
       long_description,
       price,
+      stock,
       discount_price,
       options,
       active: false, // Set active to false by default
@@ -233,7 +177,7 @@ const getProductById = async (req, res) => {
         },
       })
       .select(
-        'sku product_image product_name short_description price discount_price options active'
+        'sku product_image product_name short_description price stock discount_price options active'
       );
 
     if (!product) {
@@ -248,6 +192,7 @@ const getProductById = async (req, res) => {
       product_name,
       short_description,
       price,
+      stock,
       discount_price,
       options,
       active,
@@ -261,6 +206,7 @@ const getProductById = async (req, res) => {
       product_name,
       short_description,
       price,
+      stock,
       discount_price,
       options,
       active,

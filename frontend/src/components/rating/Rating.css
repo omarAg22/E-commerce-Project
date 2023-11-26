@@ -1,0 +1,23 @@
+/* Rating.css */
+
+.rating {
+    display: flex;
+    align-items: center;
+    color: #f8ce0b; /* Set the color of the stars */
+  }
+  
+  .stars {
+    display: flex;
+  }
+  
+  .stars i {
+    font-size: 1.2rem; /* Set the font size of the stars */
+    margin-right: 0.1rem; /* Adjust the spacing between stars */
+  }
+  
+  .reviews {
+    margin-left: 1rem; /* Add margin to separate stars from the number of reviews */
+    font-size: 0.9rem; /* Set the font size of the reviews text */
+    color: #555; /* Set the color of the reviews text */
+  }
+  
