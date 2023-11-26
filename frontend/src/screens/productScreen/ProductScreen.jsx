@@ -11,6 +11,10 @@ import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
 import Rating from '../../components/rating/Rating';
 import '../productScreen/ProductScreen.css'; // Import the CSS file for styling
+import { Helmet } from 'react-helmet-async';
+import LoadingBox from '../../components/loadingBox/LoadingBox';
+import MessageBox from '../../components/messageBox/MessageBox';
+import { getError } from '../../utils';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -46,18 +50,18 @@ const ProductScreen = () => {
         );
         dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
       } catch (err) {
-        dispatch({ type: 'FETCH_FAIL', payload: err.message });
+        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
       }
     };
     fetchData();
   }, [id]);
 
   return loading ? (
-    <div className="loading">Loading</div>
+    <LoadingBox />
   ) : error ? (
-    <div className="error">{error}</div>
+    <MessageBox variant="danger">{error}</MessageBox>
   ) : (
-    <div className='d-flex justify-content-center align-items-center'>
+    <div className="d-flex justify-content-center align-items-center">
       <Row>
         <Col md={6}>
           <img
@@ -69,6 +73,9 @@ const ProductScreen = () => {
         <Col md={3}>
           <ListGroup variant="flush">
             <ListGroup.Item>
+              <Helmet>
+                <title>{product.product_name}</title>
+              </Helmet>
               <h1 className="product-name">{product.product_name}</h1>
             </ListGroup.Item>
 
@@ -76,7 +83,9 @@ const ProductScreen = () => {
               <Rating />
             </ListGroup.Item>
 
-            <ListGroup.Item className="price">Price: ${product.price}</ListGroup.Item>
+            <ListGroup.Item className="price">
+              Price: ${product.price}
+            </ListGroup.Item>
             <ListGroup.Item className="description">
               Description: {product.short_description}
             </ListGroup.Item>
@@ -97,9 +106,13 @@ const ProductScreen = () => {
                     <Col>Status: </Col>
                     <Col>
                       {product.stock > 0 ? (
-                        <Badge className="status-badge" bg="success">In Stock</Badge>
+                        <Badge className="status-badge" bg="success">
+                          In Stock
+                        </Badge>
                       ) : (
-                        <Badge className="status-badge" bg="danger">Unavailable</Badge>
+                        <Badge className="status-badge" bg="danger">
+                          Unavailable
+                        </Badge>
                       )}
                     </Col>
                   </Row>
