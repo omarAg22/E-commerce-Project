@@ -16,7 +16,7 @@ const addUser = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({
         message:
-          "Un utilisateur avec ce nom d'utilisateur ou cette adresse e-mail existe déjà.",
+          "Un utilisateur avec ce nom d'utilisateur existe déjà.",
       });
     }
 

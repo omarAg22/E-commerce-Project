@@ -1,8 +1,8 @@
 // ProductScreen.jsx
 
 import axios from 'axios';
-import { useEffect, useReducer } from 'react';
-import { useParams } from 'react-router-dom';
+import { useContext, useEffect, useReducer } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -10,11 +10,12 @@ import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
 import Rating from '../../components/rating/Rating';
-import '../productScreen/ProductScreen.css'; // Import the CSS file for styling
+import './ProductScreen.css'; // Import the CSS file for styling
 import { Helmet } from 'react-helmet-async';
 import LoadingBox from '../../components/loadingBox/LoadingBox';
 import MessageBox from '../../components/messageBox/MessageBox';
 import { getError } from '../../utils';
+import { Store } from '../../Store';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -30,6 +31,7 @@ const reducer = (state, action) => {
 };
 
 const ProductScreen = () => {
+  const navigate = useNavigate()
   const { id } = useParams();
 
   const [{ loading, error, product }, dispatch] = useReducer(reducer, {
@@ -55,6 +57,25 @@ const ProductScreen = () => {
     };
     fetchData();
   }, [id]);
+
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { cart } = state;
+  const addToCartHandler = async () => {
+    const existItem = cart.cartItems.find((x) => x._id === product._id);
+    const quantity = existItem ? existItem.quantity + 1 : 1;
+    const { data } = await axios.get(
+      `http://localhost:3001/products/get-product-byId/${product._id}`
+    );
+
+    if (data.stock < quantity) {
+      window.alert('Sorry . Product in out of stock');
+    }
+    ctxDispatch({
+      type: 'CART_ADD_ITEM',
+      payload: { ...product, quantity},
+    });
+    navigate('/cart')
+  };
 
   return loading ? (
     <LoadingBox />
@@ -119,7 +140,9 @@ const ProductScreen = () => {
                 </ListGroup.Item>
                 {product.stock > 0 && (
                   <ListGroup.Item>
-                    <Button className="primary-btn">Add to Cart</Button>
+                    <Button onClick={addToCartHandler} className="primary-btn">
+                      Add to Cart
+                    </Button>
                   </ListGroup.Item>
                 )}
               </ListGroup>

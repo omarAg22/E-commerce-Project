@@ -83,7 +83,7 @@ const loginCostumer = async (req, res) => {
 
     // Check if the customer exists
     if (!customer) {
-      return res.status(401).json({ message: 'Authentication failed' });
+      return res.status(401).json({ message: 'Inavalid email or password' });
     }
 
     // Check if the customer's account is active
@@ -97,17 +97,17 @@ const loginCostumer = async (req, res) => {
     const isPasswordValid = await bcrypt.compare(password, customer.password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Authentication failed' });
+      return res.status(401).json({ message: 'Inavalid email or password' });
     }
 
     // If the email and password are valid, generate and return a token
     const token = jwt.sign(
       { email: customer.email, customerId: customer.id },
       secretKey,
-      { expiresIn: '1h' }
+      { expiresIn: '30d' }
     );
 
-    res.json({ token });
+    res.json({customer, token });
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
   }

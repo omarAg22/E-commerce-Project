@@ -90,7 +90,7 @@ const listProducts = async (req, res) => {
         },
       })
       .select(
-        'sku product_image product_name subcategory_id short_description price discount_price options active'
+        'sku product_image product_name subcategory_id short_description price stock discount_price options active'
       );
 
     // Formatage du résultat pour renommer les champs
@@ -101,6 +101,7 @@ const listProducts = async (req, res) => {
       product_name: product.product_name,
       short_description: product.short_description,
       price: product.price,
+      stock : product.stock,
       discount_price: product.discount_price,
       options: product.options,
       active: product.active,
