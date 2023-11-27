@@ -32,8 +32,18 @@ const createCustomer = async (req, res) => {
     // Send a validation email to the customer
     sendValidationEmail(savedCustomer);
 
+    const token = jwt.sign(
+      { email: savedCustomer.email, customerId: savedCustomer.id },
+      secretKey,
+      { expiresIn: '30d' }
+    );
+
     res.json({
-      message: 'Customer account created. A validation email has been sent.',
+      _id: savedCustomer._id,
+      first_name: savedCustomer.first_name,
+      last_name: savedCustomer.last_name,
+      email: savedCustomer.email,
+      token: token
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -107,7 +117,13 @@ const loginCostumer = async (req, res) => {
       { expiresIn: '30d' }
     );
 
-    res.json({customer, token });
+    res.json({
+      _id: customer._id,
+      first_name: customer.first_name,
+      last_name: customer.last_name,
+      email: customer.email,
+      token: token
+    });
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
   }
