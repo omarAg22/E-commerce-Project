@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
-import {ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import HomeScreen from './screens/homeScreen/HomeScreen';
 import ProductScreen from './screens/productScreen/ProductScreen';
@@ -16,10 +16,11 @@ import SigninScreen from './screens/signinScreen/SigninScreen';
 import ShippingAdressScreen from './screens/shippingAdressScreen/ShippingAdressScreen';
 import SignupScreen from './screens/signupScreen/SignupScreen';
 import PaymentScreen from './screens/paymentScreen/PaymentScreen';
+import PlaceOrderScreen from './screens/placeOrderScreen/PlaceOrderScreen';
 
 function App() {
-  const { state , dispatch: ctxDispatch } = useContext(Store);
-  const { cart , userInfo} = state;
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { cart, userInfo } = state;
 
   const signoutHandler = () => {
     ctxDispatch({ type: 'USER_SIGNOUT' });
@@ -30,7 +31,7 @@ function App() {
   return (
     <BrowserRouter>
       <div className="d-flex flex-column site-container">
-      <ToastContainer position="bottom-center" limit={1} />
+        <ToastContainer position="bottom-center" limit={1} />
         <header>
           <Navbar bg="dark" variant="dark">
             <Container className="">
@@ -46,27 +47,30 @@ function App() {
                     </Badge>
                   )}
                 </Link>
-                {userInfo? (
-                  <NavDropdown title={userInfo.first_name} id="basic-nav-dropdown">
-                  <LinkContainer to="/profile">
-                    <NavDropdown.Item>User Profile</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to="/orderhistory">
-                    <NavDropdown.Item>Order History</NavDropdown.Item>
-                  </LinkContainer>
-                  <NavDropdown.Divider />
-                  <Link
-                    className="dropdown-item"
-                    to="#signout"
-                    onClick={signoutHandler}
+                {userInfo ? (
+                  <NavDropdown
+                    title={userInfo.first_name}
+                    id="basic-nav-dropdown"
                   >
-                    Sign Out
+                    <LinkContainer to="/profile">
+                      <NavDropdown.Item>User Profile</NavDropdown.Item>
+                    </LinkContainer>
+                    <LinkContainer to="/orderhistory">
+                      <NavDropdown.Item>Order History</NavDropdown.Item>
+                    </LinkContainer>
+                    <NavDropdown.Divider />
+                    <Link
+                      className="dropdown-item"
+                      to="#signout"
+                      onClick={signoutHandler}
+                    >
+                      Sign Out
+                    </Link>
+                  </NavDropdown>
+                ) : (
+                  <Link className="nav-link" to="/signin">
+                    Sign In
                   </Link>
-                </NavDropdown>
-                ):(
-                   <Link className="nav-link" to="/signin">
-                   Sign In
-                 </Link>
                 )}
               </Nav>
             </Container>
@@ -81,6 +85,7 @@ function App() {
               <Route path="/signup" element={<SignupScreen />} />
               <Route path="/shipping" element={<ShippingAdressScreen />} />
               <Route path="/payment" element={<PaymentScreen />} />
+              <Route path="/placeorder" element={<PlaceOrderScreen />} />
               <Route path="/" element={<HomeScreen />} />
             </Routes>
           </Container>
