@@ -1,17 +1,20 @@
+// PlaceOrderScreen.jsx
+
+import { useContext, useEffect, useReducer } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
-import { Helmet } from 'react-helmet-async';
-import { Link, useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Store } from '../../Store';
 import CheckoutSteps from '../../components/checkoutSteps/CheckoutSteps';
-import { useContext, useEffect, useReducer } from 'react';
-import { toast } from 'react-toastify';
-import { getError } from '../../utils';
-import axios from 'axios';
 import LoadingBox from '../../components/loadingBox/LoadingBox';
+import { getError } from '../../utils';
+import './PlaceOrderScreen.css';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -35,7 +38,7 @@ const PlaceOrderScreen = () => {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart, userInfo } = state;
 
-  const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100; // 123.2345 => 123.23
+  const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
   cart.itemsPrice = round2(
     cart.cartItems.reduce((a, c) => a + c.quantity * c.price, 0)
   );
@@ -46,24 +49,35 @@ const PlaceOrderScreen = () => {
   const placeOrderHandler = async () => {
     try {
       dispatch({ type: 'CREATE_REQUEST' });
+      const orderData = {
+        orderItems: cart.cartItems.map((item) => ({
+          product: item._id,
+          sku: item.sku,
+          name: item.product_name,
+          image: item.product_image,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+        itemsPrice: cart.itemsPrice,
+        shippingPrice: cart.shippingPrice,
+        taxPrice: cart.taxPrice,
+        totalPrice: cart.totalPrice,
+      };
+
 
       const { data } = await axios.post(
-        '/api/orders',
-        {
-          orderItems: cart.cartItems,
-          shippingAddress: cart.shippingAddress,
-          paymentMethod: cart.paymentMethod,
-          itemsPrice: cart.itemsPrice,
-          shippingPrice: cart.shippingPrice,
-          taxPrice: cart.taxPrice,
-          totalPrice: cart.totalPrice,
-        },
+        'http://localhost:3001/orders/create-order',
+        orderData,
+
         {
           headers: {
             authorization: `Bearer ${userInfo.token}`,
           },
         }
       );
+
       ctxDispatch({ type: 'CART_CLEAR' });
       dispatch({ type: 'CREATE_SUCCESS' });
       localStorage.removeItem('cartItems');
@@ -79,8 +93,10 @@ const PlaceOrderScreen = () => {
       navigate('/payment');
     }
   }, [cart, navigate]);
+
+
   return (
-    <div>
+    <div className="place-order-container">
       <CheckoutSteps step1 step2 step3 step4></CheckoutSteps>
       <Helmet>
         <title>Preview Order</title>
@@ -88,30 +104,33 @@ const PlaceOrderScreen = () => {
       <h1 className="my-3">Preview Order</h1>
       <Row>
         <Col md={8}>
-          <Card className="mb-3">
+          <Card className="shipping-details-card mb-3">
             <Card.Body>
               <Card.Title>Shipping</Card.Title>
               <Card.Text>
                 <strong>Name:</strong> {cart.shippingAddress.fullName} <br />
-                <strong>Address: </strong> {cart.shippingAddress.address},
-                {cart.shippingAddress.city}, {cart.shippingAddress.postalCode},
-                {cart.shippingAddress.country}
+                <strong>Address: </strong>{' '}
+                {`${cart.shippingAddress.address}, ${cart.shippingAddress.city}, ${cart.shippingAddress.postalCode}, ${cart.shippingAddress.country}`}
               </Card.Text>
-              <Link to="/shipping">Edit</Link>
+              <Link to="/shipping" className="edit-link">
+                Edit
+              </Link>
             </Card.Body>
           </Card>
 
-          <Card className="mb-3">
+          <Card className="payment-details-card mb-3">
             <Card.Body>
               <Card.Title>Payment</Card.Title>
               <Card.Text>
                 <strong>Method:</strong> {cart.paymentMethod}
               </Card.Text>
-              <Link to="/payment">Edit</Link>
+              <Link to="/payment" className="edit-link">
+                Edit
+              </Link>
             </Card.Body>
           </Card>
 
-          <Card className="mb-3">
+          <Card className="cart-items-card mb-3">
             <Card.Body>
               <Card.Title>Items</Card.Title>
               <ListGroup variant="flush">
@@ -136,13 +155,15 @@ const PlaceOrderScreen = () => {
                   </ListGroup.Item>
                 ))}
               </ListGroup>
-              <Link to="/cart">Edit</Link>
+              <Link to="/cart" className="edit-link">
+                Edit
+              </Link>
             </Card.Body>
           </Card>
         </Col>
 
         <Col md={4}>
-          <Card>
+          <Card className="order-summary-card">
             <Card.Body>
               <Card.Title>Order Summary</Card.Title>
               <ListGroup variant="flush">

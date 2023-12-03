@@ -1,0 +1,32 @@
+/* PlaceOrderScreen.css */
+
+.place-order-container {
+    padding: 20px;
+}
+
+.shipping-details-card,
+.payment-details-card,
+.cart-items-card,
+.order-summary-card {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.edit-link {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.cart-items-card img {
+    max-width: 100px;
+    max-height: 100px;
+    margin-right: 10px;
+}
+
+/* Ajoutez d'autres styles selon vos besoins */
