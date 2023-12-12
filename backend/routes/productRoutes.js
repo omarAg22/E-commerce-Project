@@ -16,7 +16,11 @@ router.post('/create-product', upload.single('product_image'), createProduct);
 router.get('/get-all-product', listProducts);
 router.get('/search-for-products', searchProducts);
 router.get('/get-product-byId/:id', getProductById);
-router.patch('/update-product/:id', updateProduct);
+router.put(
+  '/update-product/:id',
+  upload.single('product_image'),
+  updateProduct
+);
 router.delete('/delete-product/:id', deleteProduct);
 router.get('/tout', toutLesProduits);
 

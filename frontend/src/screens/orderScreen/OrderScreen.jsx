@@ -10,7 +10,6 @@ import { getError } from '../../utils';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Card from 'react-bootstrap/Card';
 import { toast } from 'react-toastify';
@@ -143,7 +142,7 @@ const OrderScreen = () => {
   ) : error ? (
     <MessageBox variant="danger">{error}</MessageBox>
   ) : (
-    <div>
+    <div style={{margin:'100px 0px'}}>
       <Helmet>
         <title>Your order id : {orderId}</title>
       </Helmet>

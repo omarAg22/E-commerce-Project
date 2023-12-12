@@ -77,12 +77,13 @@ const ProductScreen = () => {
     navigate('/cart')
   };
 
-  return loading ? (
+  return (
+    loading ? (
     <LoadingBox />
   ) : error ? (
     <MessageBox variant="danger">{error}</MessageBox>
   ) : (
-    <div className="d-flex justify-content-center align-items-center">
+    <div className='main-div'>
       <Row>
         <Col md={6}>
           <img
@@ -151,7 +152,7 @@ const ProductScreen = () => {
         </Col>
       </Row>
     </div>
-  );
+  ))
 };
 
 export default ProductScreen;

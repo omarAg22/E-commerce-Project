@@ -1,56 +1,56 @@
 .chekout-steps {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    list-style-type: none;
-    padding: 0;
-    margin: 20px 0;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style-type: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.chekout-steps > .col {
+  flex: 1;
+  text-align: center;
+  padding: 4px; /* Adjusted padding for more space */
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, border-right 0.3s ease-in-out; /* Modified transition property */
+  margin-right: 20px; /* Right margin for space to the right */
+}
+
+.chekout-steps > .col.active {
+  background-color: #3498db;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border-right: 2px solid #fff; /* Add a white right border to active steps */
+}
+
+.chekout-steps > .col:not(.active):hover {
+  background-color: #ddd;
+}
+
+.chekout-steps > .col i {
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+@media (max-width: 980px) {
   .chekout-steps > .col {
-    flex: 1;
-    text-align: center;
-    padding: 4px; /* Adjusted padding for more space */
-    border-radius: 20px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-    margin-right: 20px; /* Right margin for space to the right */
-  }
-  
-  .chekout-steps > .col.active {
-    background-color: #3498db; /* Blue color for active step */
-    color: #fff; /* White text for active step */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Box shadow for active step */
-  }
-  
-  /* Add a hover effect for non-active steps */
-  .chekout-steps > .col:not(.active):hover {
-    background-color: #ddd; /* Light gray color on hover */
-  }
-  
-  .chekout-steps > .col i {
-    margin-right: 8px; /* Space between icon and text */
-    font-size: 18px; /* Adjust icon size */
+    padding: 2px;
+    margin-right: 5px;
   }
 
-  @media (max-width: 980px) {
-    .chekout-steps > .col {
-      padding: 2px; /* Adjusted padding for smaller screens */
-      margin-right: 5px; /* Reduced right margin for smaller screens */
-    }
-  
-    .chekout-steps > .col i {
-      font-size: 20px; /* Adjusted icon size for smaller screens */
-    }
+  .chekout-steps > .col i {
+    font-size: 20px;
   }
-  
-  @media (max-width: 776px) {
-    .chekout-steps {
-      flex-direction: column; /* Stack steps vertically for smaller screens */
-    }
-  
-    .chekout-steps > .col {
-      flex: 1;
-      margin-bottom: 10px; /* Space below each step for smaller screens */
-    }
+}
+
+@media (max-width: 776px) {
+  .chekout-steps {
+    flex-direction: column;
   }
+
+  .chekout-steps > .col {
+    flex: 1;
+    margin-bottom: 10px;
+  }
+}

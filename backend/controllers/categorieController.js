@@ -1,9 +1,7 @@
 const Category = require('../models/categoriesModel');
-const Subcategory = require('../models/subcategoriesModel');
 
-const createCategory = async (req, res) => {
+const createCategorie = async (req, res) => {
   const { category_name } = req.body;
-
   try {
     // Check if the category name is unique
     const existingCategory = await Category.findOne({ category_name });
@@ -18,10 +16,10 @@ const createCategory = async (req, res) => {
       active: false,
     });
 
+    // console.log('hhh'+newCategory)
     if (req.file) {
       newCategory.categorie_image = req.file.path;
     }
-
     const savedCategory = await newCategory.save();
 
     res.json({ message: 'Category created successfully.',savedCategory });
@@ -33,17 +31,22 @@ const createCategory = async (req, res) => {
 const getAllCategories = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const limit = 10;
+    const limit = 9;
     const skip = (page - 1) * limit;
-    
 
-    const categories = await Category.find().limit(limit).skip(skip);
+    const [categories, totalCategories] = await Promise.all([
+      Category.find().limit(limit).skip(skip).exec(),
+      Category.countDocuments(), // Get the total count
+    ]);
 
-    res.json(categories);
+    const totalPages = Math.ceil(totalCategories / limit);
+
+    res.json({ categories, totalPages });
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: error.message });
   }
 };
+
 
 const searchForCategory = async (req, res) => {
   try {
@@ -95,34 +98,32 @@ const updateCategory = async (req, res) => {
       return res.status(400).json({ message: 'Category name already in use.' });
     }
 
-    const category = await Category.findByIdAndUpdate(
-      categoryId,
-      { category_name },
-      { new: true } // Return the updated category
-    );
+    const category = await Category.findById(categoryId);
 
     if (!category) {
       return res.status(404).json({ message: 'Category not found' });
     }
 
-    res.json(category);
+    // Update category details
+    category.category_name = category_name;
+
+    // Handle image update if a new image is provided
+    if (req.file) {
+      category.categorie_image = req.file.path;
+    }
+
+    const updatedCategory = await category.save();
+
+    res.json(updatedCategory);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
+
 const deleteCategory = async (req, res) => {
   try {
     const categoryId = req.params.id;
-
-    // Check if the category has attached subcategories
-    const subcategories = await Subcategory.find({ category_id: categoryId });
-
-    if (subcategories.length > 0) {
-      return res.status(400).json({
-        message: 'Category has attached subcategories and cannot be deleted.',
-      });
-    }
 
     const category = await Category.findByIdAndDelete(categoryId);
 
@@ -136,7 +137,7 @@ const deleteCategory = async (req, res) => {
   }
 };
 module.exports = {
-  createCategory,
+  createCategorie,
   getAllCategories,
   searchForCategory,
   getCategoryById,

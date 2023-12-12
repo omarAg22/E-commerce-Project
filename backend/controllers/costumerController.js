@@ -43,7 +43,7 @@ const createCustomer = async (req, res) => {
       first_name: savedCustomer.first_name,
       last_name: savedCustomer.last_name,
       email: savedCustomer.email,
-      token: token
+      token: token,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -122,37 +122,33 @@ const loginCostumer = async (req, res) => {
       first_name: customer.first_name,
       last_name: customer.last_name,
       email: customer.email,
-      token: token
+      token: token,
     });
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
 
-
-
 const getAllCostumers = async (req, res) => {
-  const { page = 1, sort = 'ASC' } = req.query;
-  const limit = 10;
-  const skip = (page - 1) * limit;
-  let customers;
-
   try {
-    if (sort === 'DESC') {
-      customers = await Customer.find()
-        .sort({ _id: -1 })
-        .limit(limit)
-        .skip(skip);
-    } else {
-      customers = await Customer.find()
-        .sort({ _id: 1 })
-        .limit(limit)
-        .skip(skip);
-    }
+    const page = parseInt(req.query.page) || 1;
+    const sort = req.query.sort || 'ASC';
+    const limit = 10;
+    const skip = (page - 1) * limit;
 
-    res.json(customers);
+    const customers = await Customer.find()
+      .sort({ _id: sort === 'DESC' ? -1 : 1 })
+      .limit(limit)
+      .skip(skip)
+      .exec();
+
+    const totalCustomers = await Customer.countDocuments();
+
+    const totalPages = Math.ceil(totalCustomers / limit);
+
+    res.json({ customers, totalPages });
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -165,7 +161,7 @@ const searchCostumer = async (req, res) => {
     const searchQuery = {
       $or: [
         { first_name: { $regex: query, $options: 'i' } }, // Case-insensitive search on first_name
-        { last_name: { $regex: query, $options: 'i' } },  // Case-insensitive search on last_name
+        { last_name: { $regex: query, $options: 'i' } }, // Case-insensitive search on last_name
         { email: { $regex: query, $options: 'i' } }, // Case-insensitive search on email
       ],
     };
@@ -179,7 +175,7 @@ const searchCostumer = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
   }
-}
+};
 
 const getCostumerById = async (req, res) => {
   const customerId = req.params.id;
@@ -195,7 +191,7 @@ const getCostumerById = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
   }
-}
+};
 
 const updateCostumerVv = async (req, res) => {
   const customerId = req.params.id;
@@ -218,12 +214,44 @@ const updateCostumerVv = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
   }
-}
+};
+
+const updateProfile = async (req, res) => {
+  const customer = await Customer.findById(req.customer._id);
+
+  if (customer) {
+    (customer.first_name = req.customer.first_name || customer.first_name),
+      (customer.last_name = req.customer.last_name || customer.last_name),
+      (customer.email = req.customer.email || customer.email);
+    if (req.body.password) {
+      customer.password = bcrypt.hash(req.body.password, 10);
+    }
+
+    const UpdateCustomer = await customer.save();
+    // If the email and password are valid, generate and return a token
+    const token = jwt.sign(
+      { email: UpdateCustomer.email, customerId: UpdateCustomer.id },
+      secretKey,
+      { expiresIn: '30d' }
+    );
+
+    res.send({
+      _id: UpdateCustomer._id,
+      fname: UpdateCustomer.first_name,
+      lname: UpdateCustomer.last_name,
+      email: UpdateCustomer.email,
+      token: token,
+    });
+  } else {
+    res.status(404).send({ message: 'User not found' });
+  }
+};
 module.exports = {
   createCustomer,
   loginCostumer,
   getAllCostumers,
   searchCostumer,
   getCostumerById,
-  updateCostumerVv
+  updateCostumerVv,
+  updateProfile,
 };

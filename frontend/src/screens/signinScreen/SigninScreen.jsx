@@ -47,7 +47,7 @@ const SigninScreen = () => {
   }, [navigate, redirect, userInfo]);
 
   return (
-    <Container className="small-container">
+    <Container className="small-container" style={{margin:'100px 0px'}}>
       <Helmet>
         <title>Sing In</title>
       </Helmet>

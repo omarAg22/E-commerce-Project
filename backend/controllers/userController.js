@@ -76,7 +76,7 @@ const loginUserq = async (req, res) => {
     const user = await Users.findOne({ user_name });
 
     if (!user) {
-      return res.status(401).json({ message: 'Authentication failed' });
+      return res.status(401).json({ message: 'no user' });
     }
     // Vérifiez si l'utilisateur est actif
     if (!user.active) {
@@ -88,7 +88,7 @@ const loginUserq = async (req, res) => {
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Authentication failed' });
+      return res.status(401).json({ message: 'dont match' });
     }
 
     // Mettez à jour la date de la dernière connexion
@@ -100,7 +100,14 @@ const loginUserq = async (req, res) => {
       secretKey,
       { expiresIn: '3d' }
     );
-    res.json({ token });
+    res.json({
+      _id: user._id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      role: user.role,
+      email: user.email,
+      token: token
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -113,7 +120,7 @@ const loginUser = async (req, res) => {
     const user = await Users.findOne({ user_name: username }); // Updated to match frontend field names
 
     if (!user) {
-      return res.status(401).json({ message: 'Authentication failed' });
+      return res.status(401).json({ message: 'no user' });
     }
 
     // Check if the user is active
@@ -148,7 +155,15 @@ const loginUser = async (req, res) => {
     );
 
     // Send both tokens in the response
-    res.json({user, accessToken, refreshToken });
+    res.json({
+      _id: user._id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      role: user.role,
+      email: user.email,
+      accessToken: accessToken,
+      refreshToken : refreshToken
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

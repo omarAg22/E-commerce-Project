@@ -29,7 +29,7 @@ const PaymentScreen = () => {
         navigate('/placeorder');
       };
   return (
-    <div>
+    <div style={{margin:'100px 0px'}}>
       <CheckoutSteps step1 step2 step3></CheckoutSteps>
       <div className="container small-container">
         <Helmet>

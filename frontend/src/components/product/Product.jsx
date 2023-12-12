@@ -1,6 +1,4 @@
 /* eslint-disable react/prop-types */
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 import './Product.css';
 import Rating from '../rating/Rating';
@@ -31,7 +29,9 @@ const Product = (props) => {
   };
 
   return (
-    <Card className="product-card">
+    <div className="products-card">
+
+      <div className='image'>
       <Link to={`/product/${product._id}`}>
         <img
           src={product.product_image}
@@ -39,28 +39,29 @@ const Product = (props) => {
           alt={product.sku}
         />
       </Link>
-      <Card.Body>
+      </div>
+      <div className='details'>
         <Link to={`/product/${product._id}`} className="product-link">
-          <Card.Title className="product-title">
+          <p className="product-title">
             {product.product_name}
-          </Card.Title>
+          </p>
         </Link>
         <Rating />
-        <Card.Text className="product-price">${product.price}</Card.Text>
+        <h4 className="product-price">${product.price}</h4>
         {product.stock === 0 ? (
-          <Button variant="light" disabled>
+          <button disabled>
             Out of stock
-          </Button>
+          </button>
         ) : (
-          <Button
+          <button
             onClick={() => addToCartHandler(product)}
             className="add-to-cart-btn"
           >
             Add To Cart
-          </Button>
+          </button>
         )}
-      </Card.Body>
-    </Card>
+      </div>
+    </div>
   );
 };
 

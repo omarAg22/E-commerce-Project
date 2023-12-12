@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const requireAuth = require('../middleware/requireAuth');
-const checkRole = require('../middleware/checkRole');
+const isAuth = require('../middleware/isAuthCustomer');
 
 const {
   createCustomer,
@@ -10,13 +9,15 @@ const {
   searchCostumer,
   getCostumerById,
   updateCostumerVv,
+  updateProfile
 } = require('../controllers/costumerController');
 
 router.post('/createCustomer', createCustomer);
 router.post('/loginCustomer', loginCostumer);
-router.get('/getAllCostumers',requireAuth,checkRole, getAllCostumers);
+router.put('/profile',isAuth, updateProfile);
+router.get('/getAllCostumers',getAllCostumers);
 router.get('/searchCostumer', searchCostumer);
-router.get('/getCostumerById/:id', getCostumerById);
 router.put('/valid/:id', updateCostumerVv);
+router.get('/getCostumerById/:id', getCostumerById);
 
 module.exports = router;

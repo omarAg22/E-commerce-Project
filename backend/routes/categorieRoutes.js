@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const { uploadCat } = require('../middleware/uploadMiddleware');
 const {
-  createCategory,
+  createCategorie,
   getAllCategories,
   searchForCategory,
   getCategoryById,
@@ -9,12 +10,19 @@ const {
   deleteCategory,
 } = require('../controllers/categorieController');
 
-const {uploadCat} = require('../middleware/uploadMiddleware');
-
-router.post('/create-category',uploadCat.single('categorie_image'), createCategory);
+router.post(
+  '/create-category',
+  uploadCat.single('categorie_image'),
+  createCategorie
+);
 router.get('/all-categories', getAllCategories);
 router.get('/search-category', searchForCategory);
 router.get('/get-category-by-id/:id', getCategoryById);
-router.put('/update-category/:id', updateCategory);
+router.put(
+  '/update-category/:id',
+  uploadCat.single('categorie_image'),
+  updateCategory
+);
+
 router.delete('/delete-category/:id', deleteCategory);
 module.exports = router;

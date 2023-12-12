@@ -13,9 +13,8 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  subcategory_id: {
-    type: mongoose.Schema.Types.ObjectId, // Reference to the Subcategories model
-    ref: 'Subcategories', // The name of the model to refer to
+  category_name: {
+    type: String,
     required: true,
   },
   short_description: {

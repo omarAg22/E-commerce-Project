@@ -1,0 +1,17 @@
+/* NavigationBar.css */
+
+/* Style pour les liens de la barre de navigation */
+.navbar-dark .navbar-nav .nav-link {
+  color: #000; /* Couleur du texte en blanc */
+  text-decoration: none !important; /* Pas de soulignement pour les liens */
+}
+
+/* Style pour le texte du bouton de la barre de navigation */
+.navbar-dark .navbar-toggler-icon {
+  color: #000; /* Couleur du texte en blanc */
+}
+
+/* Style pour le texte du marqueur de badge dans le lien "Cart" */
+.navbar-dark .nav-link .badge {
+  color: #000; /* Couleur du texte en blanc */
+}

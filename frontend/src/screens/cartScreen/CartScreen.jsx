@@ -43,7 +43,7 @@ const CartScreen = () => {
     navigate('/signin?redirect=/shipping');
   }
   return (
-    <div>
+    <div style={{margin:'100px 0px'}}>
       <Helmet>
         <title>Shopping Cart</title>
       </Helmet>

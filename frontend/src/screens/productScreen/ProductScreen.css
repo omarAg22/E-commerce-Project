@@ -1,60 +1,61 @@
+.main-div {
+  margin: 300px 0px;
+}
 
-  
-  .img-large {
-    width: 100%;
-    max-height: 400px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-  
-  .product-name {
-    color: #333;
-    margin-bottom: 0.5rem;
-  }
-  
-  .list-group {
-    margin-top: 1rem;
-  }
-  
-  .list-group-item {
-    border: none;
-  }
-  
-  .price {
-    font-weight: bold;
-  }
-  
-  .description {
-    color: #555;
-  }
-  
-  .card {
-    width: 100%;
-    max-width: 300px;
-    margin-top: 1rem;
-    background-color: #f8f9fa;
-    border: none;
-  }
-  
-  .card-body {
-    padding: 15px;
-  }
-  
-  .status-badge {
-    background-color: #28a745;
-  }
-  
-  .status-badge-danger {
-    background-color: #dc3545;
-  }
-  
-  .primary-btn {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-  }
-  
-  .primary-btn:hover {
-    background-color: #0056b3;
-  }
-  
+.img-large {
+  width: 70%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.product-name {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.list-group {
+  margin-top: 1rem;
+}
+
+.list-group-item {
+  border: none;
+}
+
+.price {
+  font-weight: bold;
+}
+
+.description {
+  color: #555;
+}
+
+.card {
+  width: 100%;
+  max-width: 300px;
+  margin-top: 1rem;
+  background-color: #f8f9fa;
+  border: none;
+}
+
+.card-body {
+  padding: 15px;
+}
+
+.status-badge {
+  background-color: #28a745;
+}
+
+.status-badge-danger {
+  background-color: #dc3545;
+}
+
+.primary-btn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+}
+
+.primary-btn:hover {
+  background-color: #0056b3;
+}

@@ -96,7 +96,7 @@ const PlaceOrderScreen = () => {
 
 
   return (
-    <div className="place-order-container">
+    <div className="place-order-container" style={{margin:'100px 0px'}}>
       <CheckoutSteps step1 step2 step3 step4></CheckoutSteps>
       <Helmet>
         <title>Preview Order</title>

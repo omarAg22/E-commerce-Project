@@ -1,14 +1,8 @@
-import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import HomeScreen from './screens/homeScreen/HomeScreen';
 import ProductScreen from './screens/productScreen/ProductScreen';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import Badge from 'react-bootstrap/Badge';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import Container from 'react-bootstrap/Container';
-import { LinkContainer } from 'react-router-bootstrap';
 import { useContext } from 'react';
 import { Store } from './Store';
 import CartScreen from './screens/cartScreen/CartScreen';
@@ -18,6 +12,11 @@ import SignupScreen from './screens/signupScreen/SignupScreen';
 import PaymentScreen from './screens/paymentScreen/PaymentScreen';
 import PlaceOrderScreen from './screens/placeOrderScreen/PlaceOrderScreen';
 import OrderScreen from './screens/orderScreen/OrderScreen';
+import OrderHistory from './screens/orderHistory/OrderHistory';
+import NavigationBar from './components/navigationBar/NavigationBar';
+import Footer from './components/footer/Footer';
+import ProfileScreen from './screens/profile/ProfileScreen';
+import Shop from './screens/shop/Shop';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -34,67 +33,29 @@ function App() {
       <div className="d-flex flex-column site-container">
         <ToastContainer position="bottom-center" limit={1} />
         <header>
-          <Navbar bg="dark" variant="dark">
-            <Container className="">
-              <LinkContainer to="/">
-                <Navbar.Brand>OurStore</Navbar.Brand>
-              </LinkContainer>
-              <Nav className="me-auto">
-                <Link to="/cart" className="nav-link">
-                  <i className="fas fa-shopping-cart"></i>
-                  {cart.cartItems.length > 0 && (
-                    <Badge pill bg="danger">
-                      {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
-                    </Badge>
-                  )}
-                </Link>
-                {userInfo ? (
-                  <NavDropdown
-                    title={userInfo.first_name}
-                    id="basic-nav-dropdown"
-                  >
-                    <LinkContainer to="/profile">
-                      <NavDropdown.Item>User Profile</NavDropdown.Item>
-                    </LinkContainer>
-                    <LinkContainer to="/orderhistory">
-                      <NavDropdown.Item>Order History</NavDropdown.Item>
-                    </LinkContainer>
-                    <NavDropdown.Divider />
-                    <Link
-                      className="dropdown-item"
-                      to="#signout"
-                      onClick={signoutHandler}
-                    >
-                      Sign Out
-                    </Link>
-                  </NavDropdown>
-                ) : (
-                  <Link className="nav-link" to="/signin">
-                    Sign In
-                  </Link>
-                )}
-              </Nav>
-            </Container>
-          </Navbar>
+          <NavigationBar
+            userInfo={userInfo}
+            cart={cart}
+            signoutHandler={signoutHandler}
+          />
         </header>
-        <main>
-          <Container className="mt-4">
+          <div className='container'>
             <Routes>
-              <Route path="/product/:id" element={<ProductScreen />} />
+              <Route path="/" element={<HomeScreen />} />
+              <Route path="/shop/:id" element={<ProductScreen />} />
               <Route path="/cart" element={<CartScreen />} />
+              <Route path="/shop" element={<Shop />} />
               <Route path="/signin" element={<SigninScreen />} />
               <Route path="/signup" element={<SignupScreen />} />
+              <Route path="/profile" element={<ProfileScreen />} />
               <Route path="/shipping" element={<ShippingAdressScreen />} />
               <Route path="/payment" element={<PaymentScreen />} />
               <Route path="/placeorder" element={<PlaceOrderScreen />} />
               <Route path="/order/:id" element={<OrderScreen />} />
-              <Route path="/" element={<HomeScreen />} />
+              <Route path="/orderhistory" element={<OrderHistory />} />
             </Routes>
-          </Container>
-        </main>
-        <footer>
-          <div className="text-center">All right reserved</div>
-        </footer>
+          </div>
+          <Footer />
       </div>
     </BrowserRouter>
   );
